@@ -138,6 +138,7 @@ class Trix.AutoComplete
          HTML = dropDownItem[0].innerText
 
       return unless HTML?
+      return unless endingPosition >= startingPosition
 
       @editor.setSelectedRange([startingPosition, endingPosition + 1])
       @editor.deleteInDirection("forward")
