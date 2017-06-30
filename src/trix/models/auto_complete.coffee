@@ -25,10 +25,10 @@ class Trix.AutoComplete
       @documentString = newDocumentString
       @autoCompleteStart(newDocumentString[position - 1], position - 1)
 
-      @autoCompleteOn = false
-      #populatedropDown
+      #@autoCompleteOn = false
 
    autoCompleteStart: (character, position) ->
+      @autoCompleteOn = false
       searchForSymbol = true
       results = []
       currentString = ""
@@ -93,6 +93,7 @@ class Trix.AutoComplete
 
    populateDropDown: (results)=>
       return unless results?
+      return unless @autoCompleteOn
       @numDropDownItems = 0
 
       @dropDownContainer.empty()
@@ -175,7 +176,6 @@ class Trix.AutoComplete
          self.insertAutoCompleteItem($(this))
 
       $(@dropDownItem).on 'keydown', (event) ->
-         console.log(self)
          currentDataIndex = parseInt($(this).attr('data-index'))
          nextDataIndex = 0
          jquerySelector = self.dropDownItem + "[data-index='" + nextDataIndex + "']"
@@ -203,8 +203,7 @@ class Trix.AutoComplete
             event.preventDefault()
             $('trix-editor').focus()
           else
-             self.dropDownContainer.hide()
-             self.dropDownContainer.empty()
+             self.autoCompleteEnd();
              $('trix-editor').focus()
 
 
