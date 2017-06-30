@@ -19,7 +19,7 @@ class Trix.AutoComplete
       newDocumentString = @editor.getDocument().toString()
       position = @editor.getPosition()
 
-      #$(@dropDownContainer).empty()
+      @dropDownContainer.empty()
    #   $(@dropDownContainer).show()
 
       @documentString = newDocumentString
@@ -79,18 +79,17 @@ class Trix.AutoComplete
       @dropDownContainer.hide()
       @dropDownContainer.empty()
 
+   # TODO Figure how to deal with situation where trix editor moves but does not change size
    positionDropDown: ->
-      parentRange = $('.bb-jobs-description__container--write').offset()
+      parentRange = $('trix-editor').offset()
       domRange = @editor.getClientRectAtPosition(@editor.getPosition() - 1)
 
       return unless domRange?
 
-      topVal = domRange.top + domRange.height - parentRange.top
-      leftVal = domRange.left + domRange.width - parentRange.left
+      topVal = domRange.top + domRange.height
+      leftVal = domRange.left + domRange.width
 
-   #   $(@dropDownContainer).append(dropDown)
-
-      @dropDown.css({top: topVal, left: leftVal, position:'absolute', 'z-index':100})
+      @dropDown.css({top: topVal, left: leftVal, position: 'fixed', 'z-index':100})
 
    populateDropDown: (results)=>
       return unless results?
