@@ -47,7 +47,7 @@ class Trix.HTMLParser extends Trix.BasicObject
   sanitizeHTML = (html) ->
     # Remove everything after </html>
     html = html.replace(/<\/html[^>]*>[^]*$/i, "</html>")
-
+    html = "<div class='bb-rich-text-editor__content'>" + html + "</div>"
     doc = document.implementation.createHTMLDocument("")
     doc.documentElement.innerHTML = html
     {body, head} = doc

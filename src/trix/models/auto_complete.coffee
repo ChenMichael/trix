@@ -1,7 +1,7 @@
 {handleEvent} = Trix
 
 class Trix.AutoComplete
-   constructor: (@editor, @dropDownContainer, @strategies)->
+   constructor: (@editor, @editorElement, @dropDownContainer, @strategies)->
       @autoCompleteOn = false
       @documentString = @editor.getDocument().toString()
       @startingPosition = 0
@@ -20,6 +20,7 @@ class Trix.AutoComplete
       @checkAutoComplete(@documentString[position - 1], position - 1)
 
    checkAutoComplete: (currentString, position) ->
+      return unless currentString?
       @autoCompleteOn = false
       searchForSymbol = true
       results = []
@@ -64,6 +65,8 @@ class Trix.AutoComplete
    positionDropDown: ->
       parentRange = $('trix-editor').offset()
       domRange = @editor.getClientRectAtPosition(@editor.getPosition() - 1)
+
+      return unless domRange?
 
       topVal = domRange.top + domRange.height
       leftVal = domRange.left + domRange.width
@@ -146,7 +149,6 @@ class Trix.AutoComplete
       dropDownItemJQ.on 'keydown', (event) ->
          currentDataIndex = parseInt($(this).attr('data-index'))
          nextDataIndex = 0
-         #jquerySelector = dropDownItemSelector + "[data-index='" + nextDataIndex + "']"
 
          if event.keyCode == 38
             if currentDataIndex == 0
@@ -163,7 +165,7 @@ class Trix.AutoComplete
                nextDataIndex = 0
             else
                nextDataIndex = currentDataIndex + 1
-               
+
             jquerySelector = dropDownItemSelector + "[data-index='" + nextDataIndex + "']"
             $(this).blur()
             $(jquerySelector).focus()
@@ -171,7 +173,9 @@ class Trix.AutoComplete
          else if event.keyCode == 13 || event.keyCode == 9
             self.insertAutoCompleteItem($(this))
             event.preventDefault()
-            $('trix-editor').focus()
-          else
-             self.autoCompleteEnd();
-             $('trix-editor').focus()
+            self.editorElement.focus()
+         else if event.keycode == 16
+            event.preventDefault()
+         else
+            self.autoCompleteEnd();
+            self.editorElement.focus()
