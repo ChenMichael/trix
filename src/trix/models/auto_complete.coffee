@@ -101,7 +101,9 @@ class Trix.AutoComplete
       @numDropDownItems++
 
    insertAutoCompleteItem: (dropDownItem) ->
-      $(dropDownItem).addClass("active")
+      dropDownItem.addClass("active")
+
+      return if dropDownItem.children().prop("tagName") == "BB-LOADING"
 
       if @currentStrategy.extract
          HTML = @currentStrategy.extract(dropDownItem[0])
@@ -115,7 +117,7 @@ class Trix.AutoComplete
 
       @currentStrategy.replace(HTML, @startingPosition)
 
-      @autoCompleteEnd()
+      #@autoCompleteEnd()
 
    initEventListeners: ->
       self = this
@@ -173,6 +175,7 @@ class Trix.AutoComplete
          else if event.keyCode == 13 || event.keyCode == 9
             self.insertAutoCompleteItem($(this))
             event.preventDefault()
+            self.autoCompleteEnd()
             self.editorElement.focus()
          else if event.keycode == 16
             event.preventDefault()

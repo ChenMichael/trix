@@ -19,8 +19,8 @@ class Trix.Editor
     @undoManager = new Trix.UndoManager @composition
     @composition.loadSnapshot(snapshot)
 
-  loadAutoComplete: (element, dropdown, strategies)  ->
-     @autoComplete = new Trix.AutoComplete element, dropdown, strategies
+  loadAutoComplete: (editor, editorElement, dropdown, strategies)  ->
+     @autoComplete = new Trix.AutoComplete editor, editorElement, dropdown, strategies
 
   getDocument: ->
     @composition.document
@@ -38,7 +38,7 @@ class Trix.Editor
      @autoComplete.autoCompleteHandler()
 
   createAttachment: (content) ->
-     new Trix.Attachment(content)
+     return new Trix.Attachment content
 
   # Document manipulation
 
