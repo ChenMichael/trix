@@ -1,4 +1,5 @@
 #= require trix/models/undo_manager
+#= require trix/models/auto_complete
 
 class Trix.Editor
   constructor: (@composition, @selectionManager, @element) ->
@@ -18,6 +19,9 @@ class Trix.Editor
     @undoManager = new Trix.UndoManager @composition
     @composition.loadSnapshot(snapshot)
 
+  loadAutoComplete: (element, dropdown, strategies)  ->
+     @autoComplete = new Trix.AutoComplete element, dropdown, strategies
+
   getDocument: ->
     @composition.document
 
@@ -29,6 +33,12 @@ class Trix.Editor
 
   toJSON: ->
     @getSnapshot()
+
+  autoCompleteHandler: ->
+     @autoComplete.autoCompleteHandler()
+
+  createAttachment: (content) ->
+     new Trix.Attachment(content)
 
   # Document manipulation
 
